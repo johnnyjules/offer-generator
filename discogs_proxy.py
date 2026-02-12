@@ -8,6 +8,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import urllib.request
 import urllib.parse
 import json
+import os
 
 class ProxyHandler(BaseHTTPRequestHandler):
     
@@ -62,8 +63,11 @@ class ProxyHandler(BaseHTTPRequestHandler):
         # Custom log format
         print(f"[PROXY] {self.address_string()} - {format % args}")
 
-def run_proxy(port=8001):
-    server = HTTPServer(('localhost', port), ProxyHandler)
+def run_proxy(port=None):
+    if port is None:
+        port = int(os.environ.get('PORT', 8001))
+    
+    server = HTTPServer(('0.0.0.0', port), ProxyHandler)
     print(f"╔═══════════════════════════════════════════════════════╗")
     print(f"║   DISCOGS CORS PROXY SERVER LÄUFT                     ║")
     print(f"║   Port: {port}                                           ║")
